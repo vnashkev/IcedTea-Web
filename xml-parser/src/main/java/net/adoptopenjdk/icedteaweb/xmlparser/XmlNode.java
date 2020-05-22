@@ -18,6 +18,6 @@ public interface XmlNode {
 
     List<XmlNode> getChildren(final String name);
 
-    ElementName getNodeName();
+    String getNodeName();
 
 }

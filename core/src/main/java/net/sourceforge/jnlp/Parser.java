@@ -242,7 +242,7 @@ public final class Parser {
         this.allowExtensions = settings.isExtensionAllowed();
 
         // ensure it's a JNLP node
-        if (root == null || !root.getNodeName().getName().equals(JNLPFile.JNLP_ROOT_ELEMENT)) {
+        if (root == null || !root.getNodeName().equals(JNLPFile.JNLP_ROOT_ELEMENT)) {
             throw new ParseException("Root element is not a jnlp element.");
         }
 
@@ -325,7 +325,7 @@ public final class Parser {
         UpdateDesc updateDesc = null;
         XmlNode child = parent.getFirstChild();
         while (child != null) {
-            if (child.getNodeName().getName().equals(UPDATE_ELEMENT)) {
+            if (child.getNodeName().equals(UPDATE_ELEMENT)) {
                 if (strict && updateDesc != null) {
                     throw new ParseException("Only one update element is allowed");
                 }
@@ -424,7 +424,7 @@ public final class Parser {
         // step through the elements
         XmlNode child = node.getFirstChild();
         while (child != null) {
-            final String name = child.getNodeName().getName();
+            final String name = child.getNodeName();
 
             // check for nativelib but no trusted environment
             if (NATIVELIB_ELEMENT.equals(name)) {
@@ -540,7 +540,7 @@ public final class Parser {
      * @throws ParseException if the JNLP file is invalid
      */
     private JARDesc getJAR(final XmlNode node) throws ParseException {
-        boolean nativeJar = NATIVELIB_ELEMENT.equals(node.getNodeName().getName());
+        boolean nativeJar = NATIVELIB_ELEMENT.equals(node.getNodeName());
         final URL location = getRequiredURL(node, JARDesc.HREF_ATTRIBUTE, base, strict);
         final VersionString versionString = getVersionString(node, JARDesc.VERSION_ATTRIBUTE, null);
         final String part = getAttribute(node, JARDesc.PART_ATTRIBUTE, null);
@@ -680,7 +680,7 @@ public final class Parser {
         // step through the elements
         XmlNode child = node.getFirstChild();
         while (child != null) {
-            String name = child.getNodeName().getName();
+            String name = child.getNodeName();
 
             if (InformationDesc.TITLE_ELEMENT.equals(name)) {
                 addInfo(informationDesc, child, null, getSpanText(child, false));
@@ -744,7 +744,7 @@ public final class Parser {
             return;
         }
 
-        info.addItem(node.getNodeName().getName() + modStr, value);
+        info.addItem(node.getNodeName() + modStr, value);
     }
 
     /**
@@ -849,7 +849,7 @@ public final class Parser {
             throw new ParseException("Only one application-desc element allowed per JNLP file.");
         } else if (candidates.size() == 1) {
             final XmlNode child = candidates.get(0);
-            final String name = child.getNodeName().getName();
+            final String name = child.getNodeName();
 
             if (APPLET_DESC_ELEMENT.equals(name)) {
                 return getAppletDesc(child);
@@ -965,7 +965,7 @@ public final class Parser {
 
         XmlNode child = parent.getFirstChild();
         while (child != null) {
-            final String name = child.getNodeName().getName();
+            final String name = child.getNodeName();
 
             if (ComponentDesc.COMPONENT_DESC_ELEMENT.equals(name)) {
                 return new ComponentDesc();
@@ -1004,7 +1004,7 @@ public final class Parser {
         // step through the elements
         XmlNode child = node.getFirstChild();
         while (child != null) {
-            final String name = child.getNodeName().getName();
+            final String name = child.getNodeName();
             if (null != name) {
                 switch (name) {
                     case DESCRIPTION_ELEMENT:
@@ -1046,7 +1046,7 @@ public final class Parser {
         // step through the elements
         XmlNode child = node.getFirstChild();
         while (child != null) {
-            final String name = child.getNodeName().getName();
+            final String name = child.getNodeName();
 
             if (null != name) {
                 switch (name) {
@@ -1099,7 +1099,7 @@ public final class Parser {
         // step through the elements
         XmlNode child = node.getFirstChild();
         while (child != null) {
-            String name = child.getNodeName().getName();
+            String name = child.getNodeName();
 
             if (null != name) {
                 switch (name) {

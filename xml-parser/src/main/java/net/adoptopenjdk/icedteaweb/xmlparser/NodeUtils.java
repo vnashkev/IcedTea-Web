@@ -31,7 +31,7 @@ public class NodeUtils {
 
         XmlNode child = node.getFirstChild();
         while (child != null) {
-            if (child.getNodeName().getName().equals(name)) {
+            if (child.getNodeName().equals(name)) {
                 result.add(child);
             }
             child = child.getNextSibling();
@@ -109,7 +109,7 @@ public class NodeUtils {
 
         if (result == null || result.length() == 0) {
             if (strict || defaultValue == null) {
-                throw new ParseException("The "+node.getNodeName().getName()+" element must specify a "+name+" attribute.");
+                throw new ParseException("The "+node.getNodeName()+" element must specify a "+name+" attribute.");
             }
         }
 
@@ -161,7 +161,7 @@ public class NodeUtils {
         } else {
             href = getAttribute(node, name, null);
         }
-        return getURL(href, node.getNodeName().getName(), base, strict);
+        return getURL(href, node.getNodeName(), base, strict);
     }
 
     public static URL getURL(final String href, final String nodeName, final URL base, final boolean strict) throws ParseException {

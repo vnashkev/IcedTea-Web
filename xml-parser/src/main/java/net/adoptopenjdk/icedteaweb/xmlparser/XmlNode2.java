@@ -95,14 +95,14 @@ public class XmlNode2 implements XmlNode, Comparable<XmlNode2> {
     }
 
     @Override
-    public ElementName getNodeName() {
-        return new ElementName(Optional.ofNullable(internalElement.getNodeName()).orElse(""));
+    public String getNodeName() {
+        return internalElement.getNodeName();
     }
 
     @Override
     public List<XmlNode> getChildren(final String name) {
         return children.stream()
-                .filter(c -> Objects.equals(c.getNodeName().getName(), name))
+                .filter(c -> Objects.equals(c.getNodeName(), name))
                 .collect(Collectors.toList());
     }
 
@@ -113,10 +113,9 @@ public class XmlNode2 implements XmlNode, Comparable<XmlNode2> {
 
     @Override
     public int compareTo(final XmlNode2 o) {
-        final String nameA = getNodeName().getName();
+        final String nameA = getNodeName();
         final String nameB = Optional.ofNullable(o)
                 .map(n -> n.getNodeName())
-                .map(e -> e.getName())
                 .orElse("");
         return nameA.compareTo(nameB);
     }
