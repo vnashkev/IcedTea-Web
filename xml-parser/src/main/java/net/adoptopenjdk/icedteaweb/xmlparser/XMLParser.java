@@ -43,6 +43,7 @@ import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
@@ -71,7 +72,15 @@ public class XMLParser {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(input);
+
+            final Reader xmlReader = XMLSanitizer.sanitizeXml(preprocessXml(new XmlStreamReader(input)));
+            final InputStream inputStreamWrapper = new InputStream() {
+                @Override
+                public int read() throws IOException {
+                    return xmlReader.read();
+                }
+            };
+            Document doc = dBuilder.parse(inputStreamWrapper);
             return new XmlNode2(doc.getDocumentElement());
         } catch (Exception ex) {
             throw new ParseException("Invalid XML document syntax.", ex);
