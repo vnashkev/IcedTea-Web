@@ -7,17 +7,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.adoptopenjdk.icedteaweb.i18n.Translator.R;
-
 /**
- * Utilities method for {@link Node}.
+ * Utilities method for {@link XmlNode}.
  */
 public class NodeUtils {
     /**
      * Returns the first child node with the specified name.
      */
-    public static Node getChildNode(final Node node, final String name) {
-        final Node[] result = getChildNodes(node, name);
+    public static XmlNode getChildNode(final XmlNode node, final String name) {
+        final XmlNode[] result = getChildNodes(node, name);
         if (result.length == 0) {
             return null;
         } else {
@@ -28,10 +26,10 @@ public class NodeUtils {
     /**
      * Returns all child nodes with the specified name.
      */
-    public static Node[] getChildNodes(final Node node, final String name) {
-        final List<Node> result = new ArrayList<>();
+    public static XmlNode[] getChildNodes(final XmlNode node, final String name) {
+        final List<XmlNode> result = new ArrayList<>();
 
-        Node child = node.getFirstChild();
+        XmlNode child = node.getFirstChild();
         while (child != null) {
             if (child.getNodeName().getName().equals(name)) {
                 result.add(child);
@@ -39,7 +37,7 @@ public class NodeUtils {
             child = child.getNextSibling();
         }
 
-        return result.toArray(new Node[0]);
+        return result.toArray(new XmlNode[0]);
     }
 
     /**
@@ -48,7 +46,7 @@ public class NodeUtils {
      *
      * @param node the node with text under it
      */
-    public static String getSpanText(final Node node) {
+    public static String getSpanText(final XmlNode node) {
         return getSpanText(node, true);
     }
 
@@ -61,7 +59,7 @@ public class NodeUtils {
      * @param node the node with text under it
      * @param preserveSpacing if true, preserve whitespace
      */
-    public static String getSpanText(final Node node, final boolean preserveSpacing) {
+    public static String getSpanText(final XmlNode node, final boolean preserveSpacing) {
         if (node == null) {
             return null;
         }
@@ -84,7 +82,7 @@ public class NodeUtils {
      * @param name the attribute
      * @param defaultValue default if no such attribute
      */
-    public static String getAttribute(final Node node, final String name, final String defaultValue) {
+    public static String getAttribute(final XmlNode node, final String name, final String defaultValue) {
         Assert.requireNonNull(node, "node");
 
         final String result = node.getAttribute(name);
@@ -106,7 +104,7 @@ public class NodeUtils {
      * @param defaultValue default value
      * @throws ParseException if the attribute does not exist or is empty
      */
-    public static String getRequiredAttribute(final Node node, final String name, final String defaultValue, final boolean strict) throws ParseException {
+    public static String getRequiredAttribute(final XmlNode node, final String name, final String defaultValue, final boolean strict) throws ParseException {
         final String result = getAttribute(node, name, null);
 
         if (result == null || result.length() == 0) {
@@ -131,7 +129,7 @@ public class NodeUtils {
      * @param base the base URL
      * @throws ParseException if the JNLP file is invalid
      */
-    public static URL getRequiredURL(final Node node, final String name, final URL base, final boolean strict) throws ParseException {
+    public static URL getRequiredURL(final XmlNode node, final String name, final URL base, final boolean strict) throws ParseException {
         // probably should change "" to null so that url is always
         // required even if !strict
         getRequiredAttribute(node, name, "", strict);
@@ -149,7 +147,7 @@ public class NodeUtils {
      * @param base the base URL
      * @throws ParseException if the JNLP file is invalid
      */
-    public static URL getURL(final Node node, final String name, final URL base, final boolean strict) throws ParseException {
+    public static URL getURL(final XmlNode node, final String name, final URL base, final boolean strict) throws ParseException {
         Assert.requireNonNull(node, "node");
 
         String href;

@@ -1,4 +1,5 @@
-﻿<!--
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
 
 This file is part of IcedTea.
 
@@ -40,7 +41,6 @@ This file is starting with EF BB BF bytes,
 but depends on your editor if yu can see them as ï»¿ or not at all.
 I fnot, use hexaeditor to verify
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0" href="percent.jnlp" codebase="http://localhost">
   <information>
     <title>percents in width/height</title>

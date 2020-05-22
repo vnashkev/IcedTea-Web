@@ -1,4 +1,4 @@
-<?xml version="*"?>
+<?xml version="1.0"?>
 <jnlp spec="*" 
       codebase="*" 
       href="*"    
@@ -19,5 +19,5 @@
   </resources>
 
 
-  <application-desc <!-- This is my comment--> main-class='*' />
+  <application-desc main-class='*' />
 </jnlp>

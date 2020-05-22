@@ -39,12 +39,14 @@ package net.adoptopenjdk.icedteaweb.xmlparser;
 
 import net.adoptopenjdk.icedteaweb.logging.Logger;
 import net.adoptopenjdk.icedteaweb.logging.LoggerFactory;
+import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.io.Reader;
 
 import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.NORMAL;
-import static net.adoptopenjdk.icedteaweb.xmlparser.XMLSanitizer.sanitizeXml;
 
 /**
  * A gateway to the actual implementation of the parsers.
@@ -62,16 +64,15 @@ public class XMLParser {
      * root of the parse tree.
      *
      * @param input the {@link InputStream} containing the XML
-     * @return a {@link Node} representing the root of the parsed XML
+     * @return a {@link XmlNode} representing the root of the parsed XML
      * @throws ParseException if parsing fails
      */
-    public final Node getRootNode(final InputStream input) throws ParseException {
+    public final XmlNode getRootNode(final InputStream input) throws ParseException {
         try {
-            final Reader reader = new XmlStreamReader(input);
-            // Clean the jnlp xml file of all comments before passing it to the parser.
-            final XMLElement xml = new XMLElement();
-            xml.parseFromReader(sanitizeXml(preprocessXml(reader)));
-            return new Node(xml);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(input);
+            return new XmlNode2(doc.getDocumentElement());
         } catch (Exception ex) {
             throw new ParseException("Invalid XML document syntax.", ex);
         }

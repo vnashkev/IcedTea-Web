@@ -51,20 +51,20 @@ import java.util.Objects;
  * regular XML Node interface (for the methods used by Parser).
  */
 /* NANO */
-public class Node {
+public class XmlNodeImpl implements XmlNode {
     private final XMLElement xml;
 
-    private Node next;
+    private XmlNode next;
 
-    private Node[] children;
+    private XmlNodeImpl[] children;
 
     private List <String> attributeNames= null;
 
-    public Node(final XMLElement xml) {
+    public XmlNodeImpl(final XMLElement xml) {
         this.xml = Objects.requireNonNull(xml);
     }
 
-    public Node getFirstChild() {
+    public XmlNode getFirstChild() {
         if (children == null) {
             getChildNodes();
         }
@@ -77,7 +77,7 @@ public class Node {
         }
     }
 
-    public Node getNextSibling() {
+    public XmlNode getNextSibling() {
         return next;
     }
 
@@ -85,15 +85,15 @@ public class Node {
         return xml.getContent();
     }
 
-    public Node[] getChildNodes() {
+    public XmlNode[] getChildNodes() {
         if (children == null) {
-            final List<Node> list = new ArrayList<>();
+            final List<XmlNodeImpl> list = new ArrayList<>();
 
             for (Enumeration<XMLElement> e = xml.enumerateChildren(); e.hasMoreElements();) {
-                list.add(new Node(e.nextElement()));
+                list.add(new XmlNodeImpl(e.nextElement()));
             }
 
-            children = list.toArray(new Node[list.size()]);
+            children = list.toArray(new XmlNodeImpl[list.size()]);
 
             for (int i = 0; i < children.length - 1; i++) {
                 children[i].next = children[i + 1];
@@ -122,6 +122,11 @@ public class Node {
 
     public String getAttribute(String name) {
         return (String) xml.getAttribute(name);
+    }
+
+    @Override
+    public List<XmlNode> getChildren(final String name) {
+        throw new RuntimeException();
     }
 
     public ElementName getNodeName() {

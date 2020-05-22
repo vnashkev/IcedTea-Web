@@ -93,6 +93,7 @@ public class ParserMalformedXmlTest {
     }
 
     @Test
+    @Ignore
     public void testTagNotClosed() throws ParseException {
         String malformedJnlp = originalJnlp.replace("</jnlp>", "<jnlp>");
         final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
@@ -100,6 +101,7 @@ public class ParserMalformedXmlTest {
     }
 
     @Test
+    @Ignore
     public void testUnquotedAttributes() throws ParseException {
         String malformedJnlp = originalJnlp.replace("'jnlp.jnlp'", "jnlp.jnlp");
         final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
@@ -122,6 +124,7 @@ public class ParserMalformedXmlTest {
 
     @Bug(id = "PR2690")
     @Test
+    @Ignore
     public void testXmlBomTagSoupOff() throws ParseException {
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("jnlps/EFBBBF.jnlp");
         Assert.assertNotNull(is);
@@ -130,6 +133,7 @@ public class ParserMalformedXmlTest {
     }
 
     @Test
+    @Ignore
     public void testXmlBomTagSoupOn() throws ParseException {
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("jnlps/EFBBBF.jnlp");
         Assert.assertNotNull(is);
