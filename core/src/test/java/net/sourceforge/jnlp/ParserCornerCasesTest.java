@@ -51,7 +51,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.MALFORMED;
-import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.NORMAL;
 
 /**
  * Test various corner cases of the parser
@@ -96,7 +95,7 @@ public class ParserCornerCasesTest {
 
     @Test
     public void testUnsupportedSpecNumber() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp spec='11.11'></jnlp>";
+        String malformedJnlp = "<?xml?><jnlp spec='11.11'></jnlp>";
         final XMLParser parser1 = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = parser1.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser parser = new Parser(null, null, root, defaultParser);
@@ -105,7 +104,7 @@ public class ParserCornerCasesTest {
 
     @Test
     public void testApplicationAndComponent() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp><application-desc/><component-desc/></jnlp>";
+        String malformedJnlp = "<?xml?><jnlp><application-desc/><component-desc/></jnlp>";
         final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser parser = new Parser(null, null, root, defaultParser);
@@ -113,9 +112,8 @@ public class ParserCornerCasesTest {
     }
 
     @Test
-    @Ignore
     public void testCommentInElements() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp spec='1.0' <!-- comment -->> </jnlp>";
+        String malformedJnlp = "<?xml?><jnlp spec='1.0' <!-- comment -->> </jnlp>";
         final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser p = new Parser(null, null, root, defaultParser);
@@ -123,9 +121,8 @@ public class ParserCornerCasesTest {
     }
 
     @Test
-    @Ignore
     public void testNestedComments() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?>" +
+        String malformedJnlp = "<?xml?>" +
                 "<jnlp><information><title>testNestedComments</title>" +
                 "<vendor>IcedTea</vendor><description>" +
                 "<!-- outer <!-- inner --> -->" +
@@ -137,9 +134,8 @@ public class ParserCornerCasesTest {
     }
 
     @Test
-    @Ignore
     public void testDoubleDashesInComments() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?>" +
+        String malformedJnlp = "<?xml?>" +
                 "<jnlp> <!-- \n" +
                 " -- a very very long and \n" +
                 " -- multiline comment \n" +
@@ -155,7 +151,7 @@ public class ParserCornerCasesTest {
     @Test
     @Ignore
     public void testCommentInElements2() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp <!-- comment --> spec='1.0'> </jnlp>";
+        String malformedJnlp = "<?xml?><jnlp <!-- comment --> spec='1.0'> </jnlp>";
         final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser p = new Parser(null, null, root, defaultParser);
@@ -164,10 +160,9 @@ public class ParserCornerCasesTest {
     }
 
     @Test
-    @Ignore
     public void testCommentInElements2_malformedOff() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp <!-- comment --> spec='1.0'> </jnlp>";
-        final XMLParser xmlParser = XmlParserFactory.getParser(NORMAL);
+        String malformedJnlp = "<?xml?><jnlp <!-- comment --> spec='1.0'> </jnlp>";
+        final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser p = new Parser(null, null, root, defaultParser);
         Assert.assertEquals("1.0", p.getSpecVersion().toString());
@@ -176,17 +171,16 @@ public class ParserCornerCasesTest {
     @Test (expected = java.lang.IllegalArgumentException.class)
     @Ignore
     public void testCommentInAttributes() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp spec='<!-- something -->'></jnlp>";
+        String malformedJnlp = "<?xml?><jnlp spec='<!-- something -->'></jnlp>";
         final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser p = new Parser(null, null, root, defaultParser);
     }
 
     @Test
-    @Ignore
     public void testCommentInAttributes_malformedOff() throws ParseException {
-        String malformedJnlp = "<?xml version=\"1.0\"?><jnlp spec='<!-- something -->'></jnlp>";
-        final XMLParser xmlParser = XmlParserFactory.getParser(NORMAL);
+        String malformedJnlp = "<?xml?><jnlp spec='<!-- something -->'></jnlp>";
+        final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         XmlNode root = xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
         Parser p = new Parser(null, null, root, defaultParser);
         //default is used
@@ -197,7 +191,7 @@ public class ParserCornerCasesTest {
     public void testCommentInElements3_malformedOff() throws IOException, ParseException {
         //having comment inside element declaration is invalid but internal parser can handle it
         try (InputStream fileStream = ClassLoader.getSystemClassLoader().getResourceAsStream("net/sourceforge/jnlp/templates/template5.jnlp")) {
-            final XMLParser xmlParser = XmlParserFactory.getParser(NORMAL);
+            final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
             XmlNode root = xmlParser.getRootNode(fileStream);
             String a = root.getChildren("application-desc").get(0).getAttribute("main-class");
             Assert.assertEquals("*", a);

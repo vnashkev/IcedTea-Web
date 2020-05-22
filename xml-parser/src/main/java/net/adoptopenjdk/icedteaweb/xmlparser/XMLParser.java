@@ -73,7 +73,7 @@ public class XMLParser {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-            final Reader xmlReader = XMLSanitizer.sanitizeXml(preprocessXml(new XmlStreamReader(input)));
+            final Reader xmlReader = preprocessXml(XMLSanitizer.sanitizeXml(new XmlStreamReader(input)));
             final InputStream inputStreamWrapper = new InputStream() {
                 @Override
                 public int read() throws IOException {
@@ -81,7 +81,7 @@ public class XMLParser {
                 }
             };
             Document doc = dBuilder.parse(inputStreamWrapper);
-            return new XmlNode2(doc.getDocumentElement());
+            return new XmlNodeImpl(doc.getDocumentElement());
         } catch (Exception ex) {
             throw new ParseException("Invalid XML document syntax.", ex);
         }

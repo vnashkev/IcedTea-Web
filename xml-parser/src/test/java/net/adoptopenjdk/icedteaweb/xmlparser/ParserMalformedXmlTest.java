@@ -51,7 +51,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.MALFORMED;
-import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.NORMAL;
 
 /**
  * Test how well the parser deals with malformed xml
@@ -108,27 +107,13 @@ public class ParserMalformedXmlTest {
         xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
     }
 
-    @Test(expected = ParseException.class)
-    public void testTagNotClosedNoTagSoup() throws ParseException {
-        String malformedJnlp = originalJnlp.replace("</jnlp>", "<jnlp>");
-        final XMLParser xmlParser = XmlParserFactory.getParser(NORMAL);
-        xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
-    }
-
-    @Test(expected = ParseException.class)
-    public void testUnquotedAttributesNoTagSoup() throws ParseException {
-        String malformedJnlp = originalJnlp.replace("'jnlp.jnlp'", "jnlp.jnlp");
-        final XMLParser xmlParser = XmlParserFactory.getParser(NORMAL);
-        xmlParser.getRootNode(new ByteArrayInputStream(malformedJnlp.getBytes()));
-    }
-
     @Bug(id = "PR2690")
     @Test
     @Ignore
     public void testXmlBomTagSoupOff() throws ParseException {
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("jnlps/EFBBBF.jnlp");
         Assert.assertNotNull(is);
-        final XMLParser xmlParser = XmlParserFactory.getParser(NORMAL);
+        final XMLParser xmlParser = XmlParserFactory.getParser(MALFORMED);
         xmlParser.getRootNode(is);
     }
 

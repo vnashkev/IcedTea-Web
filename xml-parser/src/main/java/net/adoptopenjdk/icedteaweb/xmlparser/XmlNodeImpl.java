@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class XmlNode2 implements XmlNode, Comparable<XmlNode2> {
+public class XmlNodeImpl implements XmlNode, Comparable<XmlNode> {
 
     private final Element internalElement;
 
@@ -21,11 +21,11 @@ public class XmlNode2 implements XmlNode, Comparable<XmlNode2> {
 
     private final List<XmlNode> children;
 
-    public XmlNode2(final Element internalElement) {
+    public XmlNodeImpl(final Element internalElement) {
         this(internalElement, null);
     }
 
-    public XmlNode2(final Element internalElement, final XmlNode nextNode) {
+    public XmlNodeImpl(final Element internalElement, final XmlNode nextNode) {
         this.internalElement = internalElement;
         this.nextNode = nextNode;
 
@@ -36,18 +36,18 @@ public class XmlNode2 implements XmlNode, Comparable<XmlNode2> {
                 .map(n -> (Element) n)
                 .sorted((e1, e2) -> Collator.getInstance().compare(e1.getTagName(), e2.getTagName()))
                 .collect(Collectors.toList());
-        final Map<Element, XmlNode2> mappedChildren = new HashMap<>();
+        final Map<Element, XmlNodeImpl> mappedChildren = new HashMap<>();
         for (int i = childrenElements.size() - 1; i >= 0; i--) {
             final Element element = childrenElements.get(i);
             if(i != childrenElements.size() - 1) {
                 final Element nextElement = childrenElements.get(i+1);
-                final XmlNode2 nextChildNode = mappedChildren.get(nextElement);
+                final XmlNodeImpl nextChildNode = mappedChildren.get(nextElement);
                 if(nextChildNode == null) {
                     throw new RuntimeException("Error in XML parsing!");
                 }
-                mappedChildren.put(element, new XmlNode2(element, nextChildNode));
+                mappedChildren.put(element, new XmlNodeImpl(element, nextChildNode));
             } else {
-                mappedChildren.put(element, new XmlNode2(element));
+                mappedChildren.put(element, new XmlNodeImpl(element));
             }
         }
         this.children = childrenElements.stream().map(e -> mappedChildren.get(e))
@@ -112,7 +112,7 @@ public class XmlNode2 implements XmlNode, Comparable<XmlNode2> {
     }
 
     @Override
-    public int compareTo(final XmlNode2 o) {
+    public int compareTo(final XmlNode o) {
         final String nameA = getNodeName();
         final String nameB = Optional.ofNullable(o)
                 .map(n -> n.getNodeName())
