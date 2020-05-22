@@ -43,9 +43,9 @@ import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.NORMAL;
 
@@ -70,24 +70,19 @@ public class XMLParser {
      */
     public final XmlNode getRootNode(final InputStream input) throws ParseException {
         try {
+            final String sanitizedXml = XMLSanitizer.sanitizeXml(new XmlStreamReader(input));
+            final String processedXml = preprocessXml(sanitizedXml);
+            final InputStream xmlInputStream = new ByteArrayInputStream(processedXml.getBytes(StandardCharsets.UTF_8));
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-
-            final Reader xmlReader = preprocessXml(XMLSanitizer.sanitizeXml(new XmlStreamReader(input)));
-            final InputStream inputStreamWrapper = new InputStream() {
-                @Override
-                public int read() throws IOException {
-                    return xmlReader.read();
-                }
-            };
-            Document doc = dBuilder.parse(inputStreamWrapper);
+            Document doc = dBuilder.parse(xmlInputStream);
             return new XmlNodeImpl(doc.getDocumentElement());
         } catch (Exception ex) {
             throw new ParseException("Invalid XML document syntax.", ex);
         }
     }
 
-    protected Reader preprocessXml(final Reader original) throws ParseException {
+    public String preprocessXml(final String original) throws ParseException {
         LOG.info("Using XMLParser");
         ParseException.setUsed(NORMAL);
         return original;

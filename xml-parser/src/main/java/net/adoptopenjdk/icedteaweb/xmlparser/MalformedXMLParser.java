@@ -45,12 +45,12 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import static net.adoptopenjdk.icedteaweb.xmlparser.ParserType.MALFORMED;
 
@@ -75,7 +75,7 @@ public class MalformedXMLParser extends XMLParser {
      * version of the input XML
      * @throws ParseException if an exception occurs while parsing the input
      */
-    public Reader preprocessXml(final Reader original) throws ParseException {
+    public String preprocessXml(final String original) throws ParseException {
         LOG.info("Using MalformedXMLParser");
         ParseException.setUsed(MALFORMED);
         try {
@@ -92,9 +92,9 @@ public class MalformedXMLParser extends XMLParser {
             final Writer writer = new StringWriter();
             final XMLWriter xmlWriter = new XMLWriter(writer);
             reader.setContentHandler(xmlWriter);
-            final InputSource s = new InputSource(original);
+            final InputSource s = new InputSource(new ByteArrayInputStream(original.getBytes(StandardCharsets.UTF_8)));
             reader.parse(s);
-            return new StringReader(writer.toString());
+            return writer.toString();
         } catch (final SAXException | IOException e1) {
             throw new ParseException("Invalid XML document syntax.", e1);
         }
